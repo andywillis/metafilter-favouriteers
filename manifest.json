@@ -14,9 +14,5 @@
       "js": ["content/index.js"],
       "css": ["content/index.css"]
     }
-  ],
-  "permissions": [
-    "*://*.metafilter.com/*",
-    "webRequest"
   ]
 }
