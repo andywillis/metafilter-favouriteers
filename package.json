@@ -1,0 +1,12 @@
+{
+  "name": "uws-metafilter-favouriteers",
+  "version": "1.0.0",
+  "description": "Simple extension to make Stackoverflow easier to use.",
+  "author": "Andy Willis",
+  "license": "ISC",
+  "devDependencies": {
+    "eslint": "^4.6.0",
+    "eslint-config-airbnb-base": "^12.0.0",
+    "eslint-plugin-import": "^2.7.0"
+  }
+}
