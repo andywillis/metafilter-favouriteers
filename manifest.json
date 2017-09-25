@@ -1,6 +1,6 @@
 {
   "manifest_version": 2,
-  "name": "uws-metafilter-favouriteers",
+  "name": "metafilter-favouriteers",
   "version": "1.0",
   "description": "Adds a mouseover popup of favouriteers to each Metafilter post comment.",
   "icons": {
@@ -14,5 +14,9 @@
       "js": ["content/index.js"],
       "css": ["content/index.css"]
     }
+  ],
+  "permissions": [
+    "*://*.metafilter.com/*",
+    "webRequest"
   ]
 }

@@ -1,9 +1,37 @@
 #popup {
   display: none;
-  background-color: white;
   padding: 0.5em;
-  width: 200px;
+  /* width: 450px; */
   height: auto;
+  color: #dfdfdf;
   border: 4px solid #dfdfdf;
   border-width: 0.2em;
+}
+
+.wwwcolor {
+  background-color: #1177AA; /* #006699 */
+}
+
+.askcolor {
+  background-color: #537857; /* #426746 */
+}
+
+.metatalkcolor {
+  background-color: #777777; /* #666666 */
+}
+
+.fanfarecolor {
+  background-color: #4D4564; /* #3C3453 */
+}
+
+.projectscolor {
+  background-color: #3E6B6B; /* #2D5A5A */
+}
+
+.musiccolor {
+  background-color: #444444; /* #333333 */
+}
+
+.podcastcolor {
+  background-color: #777777; /* #666666 */
 }
