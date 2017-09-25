@@ -72,7 +72,7 @@
     const url = href.split('/');
     const lid = url.pop();
     const sid = url.pop();
-    return `https://www.metafilter.com/favorited/${sid}/${lid}/json`;
+    return `https://www.metafilter.com/favorited/${sid}/${lid}/json/`;
   }
 
   function showFavourites(site, e) {
