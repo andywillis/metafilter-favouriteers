@@ -1,7 +1,7 @@
 {
   "manifest_version": 2,
   "name": "metafilter-favouriteers",
-  "version": "1.3.1",
+  "version": "1.4",
   "description": "Adds a mouseover popup of favouriteers to each Metafilter post comment.",
   "icons": {
     "48": "icons/icon-48.png",
