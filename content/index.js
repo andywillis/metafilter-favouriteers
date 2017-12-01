@@ -26,7 +26,7 @@
   function main() {
     const favourites = getLinks();
     updateElements(favourites);
-    setTimeout(main, favourites.length > 750 ? 60000 : 20000);
+    setTimeout(main, favourites.length > 750 ? 40000 : 20000);
   }
 
   function getSite() {
