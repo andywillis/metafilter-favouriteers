@@ -1,8 +1,9 @@
 #popup {
   display: none;
+  font-family: Georgia, 'Times New Roman', Times, serif;
   padding: 0.5em;
   height: auto;
-  font-size: 1em;
+  font-size: 1.1em;
   color: #dfdfdf;
   border: 2px solid #dfdfdf;
   border-width: 0.2em;

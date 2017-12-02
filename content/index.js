@@ -16,13 +16,18 @@
     const site = getSite();
     if (hasSite(site)) {
       addPopup();
-      const favourites = getLinks();
-      removeTitles(favourites);
-      addListeners(favourites, site);
+      main();
+      addListeners(site);
     }
   }
 
   init();
+
+  function main() {
+    const favourites = getLinks();
+    updateElements(favourites);
+    setTimeout(main, favourites.length > 750 ? 40000 : 20000);
+  }
 
   function getSite() {
     return document.location.host.split('.')[0];
@@ -75,7 +80,7 @@
     document.querySelector('#popup').addEventListener('click', closePopup, false);
   }
 
-  function removeTitles(favourites) {
+  function updateElements(favourites) {
     favourites.forEach(function (favourite) {
       const fav = favourite.getAttribute('title');
       const regex = /^\d+/;
@@ -83,7 +88,10 @@
         const count = fav.match(regex)[0];
         favourite.setAttribute('data-favcount', count);
         favourite.removeAttribute('title');
-        favourite.setAttribute('data-href', favourite.getAttribute('href'));
+        favourite.classList.add('favouriteer');
+        const href = favourite.getAttribute('href');
+        favourite.setAttribute('data-favouriteid', href);
+        favourite.setAttribute('data-href', href);
       }
     });
   }
@@ -96,7 +104,6 @@
   }
 
   function showFavourites(site, e) {
-    e.preventDefault();
     const { favcount, href } = e.target.dataset;
     if (favcount < 150) {
       e.target.classList.add('wait');
@@ -114,10 +121,15 @@
     return qsa('span[id^="favcnt"] a');
   }
 
-  function addListeners(favourites, site) {
-    favourites.forEach(function (favourite) {
-      favourite.addEventListener('click', showFavourites.bind(this, site), false);
-    });
+  function handleClick(site, e) {
+    if (e.target.tagName === 'A' && e.target.classList.contains('favouriteer')) {
+      e.preventDefault();
+      showFavourites(site, e);
+    }
+  }
+
+  function addListeners(site) {
+    document.addEventListener('click', handleClick.bind(this, site), false);
   }
 
 }());
