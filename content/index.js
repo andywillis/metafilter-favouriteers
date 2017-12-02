@@ -1,7 +1,5 @@
 (function () {
 
-  let timer;
-
   function qs(selector) {
     return document.querySelector(selector);
   }
@@ -12,6 +10,23 @@
 
   function handleError(error) {
     console.log(error);
+  }
+
+  function init() {
+    const site = getSite();
+    if (hasSite(site)) {
+      addPopup();
+      main();
+      addListeners(site);
+    }
+  }
+
+  init();
+
+  function main() {
+    const favourites = getLinks();
+    updateElements(favourites);
+    setTimeout(main, favourites.length > 750 ? 40000 : 20000);
   }
 
   function getSite() {
@@ -34,9 +49,10 @@
     const joinedNames = names.join(', ');
     const len = joinedNames.length;
     const min = maxLengthName(names);
-    let width = (min * 8) + (((len * 6) / 450) * 60);
+    let width = (min * 8) + (((len * 6) / 250) * 80);
     if (width > 600) width = 600;
-    popup.innerHTML = joinedNames;
+    const templ = `<div class="popupclose">X</div><div class="names">${joinedNames}</div>`;
+    popup.innerHTML = templ;
     popup.classList.add(`${site}color`);
     popup.style.width = `${width}px`;
     popup.style.left = `${e.pageX - (width / 2)}px`;
@@ -47,16 +63,24 @@
 
   function handleData(data, site, e) {
     const favourites = data.favorites;
-    let names = favourites.map(favourite => favourite.user_name);
+    const names = favourites.map(favourite => favourite.user_name);
+    e.target.classList.remove('wait');
     showPopup(names, site, e);
+  }
+
+  function closePopup(e) {
+    if (e.target.classList.contains('popupclose')) {
+      qs('#popup').style.display = 'none';
+    }
   }
 
   function addPopup() {
     const html = '<div id="popup"></div>';
     qs('body').insertAdjacentHTML('afterend', html);
+    document.querySelector('#popup').addEventListener('click', closePopup, false);
   }
 
-  function removeTitles(favourites) {
+  function updateElements(favourites) {
     favourites.forEach(function (favourite) {
       const fav = favourite.getAttribute('title');
       const regex = /^\d+/;
@@ -64,6 +88,10 @@
         const count = fav.match(regex)[0];
         favourite.setAttribute('data-favcount', count);
         favourite.removeAttribute('title');
+        favourite.classList.add('favouriteer');
+        const href = favourite.getAttribute('href');
+        favourite.setAttribute('data-favouriteid', href);
+        favourite.setAttribute('data-href', href);
       }
     });
   }
@@ -76,8 +104,10 @@
   }
 
   function showFavourites(site, e) {
-    if (e.target.getAttribute('data-favcount') < 150) {
-      fetch(getEndpoint(e.target.href))
+    const { favcount, href } = e.target.dataset;
+    if (favcount < 150) {
+      e.target.classList.add('wait');
+      fetch(getEndpoint(href))
         .then(response => response.text())
         .then(json => JSON.parse(json.replace(/\\'/g, '\'')))
         .then(data => handleData(data, site, e))
@@ -87,38 +117,19 @@
     }
   }
 
-  function hideFavourites() {
-    qs('#popup').style.display = 'none';
-    clearTimeout(timer);
-  }
-
-  function pauseHover(site, e) {
-    timer = setTimeout(function () {
-      showFavourites(site, e);
-    }, 300);
-  }
-
   function getLinks() {
     return qsa('span[id^="favcnt"] a');
   }
 
-  function addListeners(favourites, site) {
-    favourites.forEach(function (favourite) {
-      favourite.addEventListener('mouseover', pauseHover.bind(this, site), false);
-      favourite.addEventListener('mouseout', hideFavourites, false);
-    });
-  }
-
-  function init() {
-    const site = getSite();
-    if (hasSite(site)) {
-      addPopup();
-      const favourites = getLinks();
-      removeTitles(favourites);
-      addListeners(favourites, site);
+  function handleClick(site, e) {
+    if (e.target.tagName === 'A' && e.target.classList.contains('favouriteer')) {
+      e.preventDefault();
+      showFavourites(site, e);
     }
   }
 
-  init();
+  function addListeners(site) {
+    document.addEventListener('click', handleClick.bind(this, site), false);
+  }
 
 }());
